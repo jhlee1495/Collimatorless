@@ -1,0 +1,182 @@
+#  *********************************************************************    
+#  * DISCLAIMER                                                        *    
+#  *                                                                   *    
+#  * Neither the authors of this software system, nor their employing  *    
+#  * institutes, nor the agencies providing financial support for this *    
+#  * work make any representation or warranty, express or implied,     *    
+#  * regarding this software system or assume any liability for its    *    
+#  * use.                                                              *    
+#  *                                                                   *    
+#  * This code implementation is the intellectual property of the      *    
+#  * OpenGATE collaboration.                                           *    
+#  * By copying, distributing or modifying the Program (or any work    *    
+#  * based on the Program) you indicate your acceptance of this        *    
+#  * statement, and all its terms.                                     *    
+#  *********************************************************************    
+# M A N D A T O R Y                                                         
+#####                                                                       
+/gate/geometry/setMaterialDatabase MyMaterials.db                           
+# G E O M E T R Y                                                           
+#####                                                                       
+# World                                                                     
+# Define the world dimensions                                               
+##                                                                          
+/gate/world/geometry/setXLength 50 cm                                       
+/gate/world/geometry/setYLength 50 cm                                       
+/gate/world/geometry/setZLength 50 cm                                       
+/gate/world/vis/forceWireframe                                              
+# SPECThead outer                                                           
+/gate/world/daughters/name SPECThead                                        
+/gate/world/daughters/insert box                                            
+/gate/SPECThead/geometry/setXLength 15 cm                                   
+/gate/SPECThead/geometry/setYLength 4 cm                                    
+/gate/SPECThead/geometry/setZLength 4 cm                                    
+/gate/SPECThead/placement/setTranslation -5.45 5 0 cm                      
+/gate/SPECThead/setMaterial Lead                                            
+#/gate/SPECThead/placement/setRotationAxis 1 0 0                             
+#/gate/SPECThead/placement/setRotationAngle 90 deg                           
+/gate/SPECThead/vis/forceWireframe                                          
+/gate/SPECThead/vis/setColor white                                          
+# SPECThead inner                                                           
+/gate/SPECThead/daughters/name SPECThead_inner                                      
+/gate/SPECThead/daughters/insert box                                        
+/gate/SPECThead_inner/geometry/setXLength 14.8 cm                                   
+/gate/SPECThead_inner/geometry/setYLength 3.8 cm                                    
+/gate/SPECThead_inner/geometry/setZLength 3.8 cm                                    
+/gate/SPECThead_inner/placement/setTranslation 0 0 0 cm                             
+/gate/SPECThead_inner/setMaterial Air                                               
+/gate/SPECThead_inner/placement/setRotationAxis 1 0 0                               
+/gate/SPECThead_inner/placement/setRotationAngle 0 deg                              
+/gate/SPECThead_inner/vis/forceWireframe                                            
+/gate/SPECThead_inner/vis/setColor magenta                                          
+# head                                                                      
+/gate/SPECThead/daughters/name Detector_head                                           
+/gate/SPECThead/daughters/insert box                                          
+/gate/Detector_head/geometry/setXLength 2.2 cm                                         
+/gate/Detector_head/geometry/setYLength 0.2 cm                                         
+/gate/Detector_head/geometry/setZLength 2.2 cm                                       
+/gate/Detector_head/placement/setTranslation 5.45 -1.9 0 cm                           
+/gate/Detector_head/setMaterial Air                                                  
+/gate/Detector_head/vis/forceWireframe                                               
+/gate/Detector_head/vis/setColor yellow                                              
+# Detector                                                                  
+/gate/Detector_head/daughters/name Detector                                          
+/gate/Detector_head/daughters/insert box                                             
+/gate/Detector/geometry/setXLength 2 cm                                     
+/gate/Detector/geometry/setYLength 0.1 cm                                     
+/gate/Detector/geometry/setZLength 2 cm                                   
+/gate/Detector/placement/setTranslation 0. 0.05 0. cm                      
+/gate/Detector/setMaterial CdTe                                              
+/gate/Detector/vis/forceWireframe                                           
+/gate/Detector/vis/setColor green                                           
+# Pixel                                                                     
+#/gate/Detector/daughters/name Pixel                                         
+#/gate/Detector/daughters/insert box                                         
+#/gate/Pixel/geometry/setXLength 2 mm                                        
+#/gate/Pixel/geometry/setYLength 2 mm                                        
+#/gate/Pixel/geometry/setZLength 0.1 cm                                      
+#/gate/Pixel/placement/setTranslation 0 0 0 cm                               
+#/gate/Pixel/setMaterial CdTe                                                
+#/gate/Pixel/vis/forceWireframe                                              
+#/gate/Pixel/vis/setColor blue                                               
+# Array                                                                     
+#/gate/Pixel/repeaters/insert cubicArray                                     
+#/gate/Pixel/cubicArray/setRepeatNumberX 10                                  
+#/gate/Pixel/cubicArray/setRepeatNumberY 10                                  
+#/gate/Pixel/cubicArray/setRepeatNumberZ 10                                  
+#/gate/Pixel/cubicArray/setRepeatVector 2 2 0 mm                             
+#/gate/Pixel/vis/setColor red                                                
+#/gate/SPECThead/repeaters/insert ring                                       
+#/gate/SPECThead/ring/setRepeatNumber 8                                      
+#/gate/SPECThead/ring/enableAutoRotation                                    
+#/gate/SPECThead/ring/setPoint1 1. 0. 0. mm                                  
+#/gate/SPECThead/ring/setPoint2 0. 0. 0. mm                                  
+# BACK-COMPARTMENT                                                          
+# Create the back-compartment volume                                        
+/gate/SPECThead/daughters/name compartment                                    
+/gate/SPECThead/daughters/insert box                                          
+/gate/compartment/geometry/setXLength 2. cm                                 
+/gate/compartment/geometry/setYLength 0.25 cm                                 
+/gate/compartment/geometry/setZLength 2. cm                               
+/gate/compartment/placement/setTranslation 5.5 -1.675 0 cm                  
+/gate/compartment/setMaterial Glass                                         
+/gate/compartment/vis/setColor grey                                         
+# Attach volumes to a system                                                
+/gate/systems/SPECThead/crystal/attach Detector                             
+#/gate/systems/SPECThead/pixel/attach Pixel                                  
+#/gate/systems/SPECThead/describe                                           
+# Define a sensitive Detector                                               
+/gate/Detector/attachCrystalSD                                                 
+#  P H Y S I C S                                                            
+#####                                                                       
+/gate/physics/addProcess PhotoElectric                                      
+/gate/physics/processes/PhotoElectric/setModel StandardModel                
+/gate/physics/addProcess Compton                                            
+/gate/physics/processes/Compton/setModel PenelopeModel                      
+/gate/physics/addProcess RayleighScattering                                 
+/gate/physics/processes/RayleighScattering/setModel PenelopeModel           
+/gate/physics/addProcess ElectronIonisation                                 
+/gate/physics/processes/ElectronIonisation/setModel StandardModel e-        
+/gate/physics/addProcess Bremsstrahlung                                     
+/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-            
+/gate/physics/addProcess MultipleScattering e-                              
+/gate/physics/processList Enabled                                           
+/gate/physics/processList Initialized                                       
+# I N I T I A L I Z A T I O N                                               
+#####                                                                       
+/gate/run/initialize                                                        
+# V I S U A L I S A T I O N                                                 
+#####                                                                       
+/vis/disable                                                               
+#/control/execute vis.mac                                                    
+# D I G I T I Z E R                                                         
+/gate/digitizer/Singles/insert                        adder                 
+/gate/digitizer/Singles/insert                        readout               
+/gate/digitizer/Singles/readout/setDepth              1                     
+/gate/digitizer/Singles/insert                        blurring              
+/gate/digitizer/Singles/blurring/setResolution        0.1                   
+/gate/digitizer/Singles/blurring/setEnergyOfReference 122. keV              
+/gate/digitizer/Singles/insert                        thresholder           
+/gate/digitizer/Singles/thresholder/setThreshold      110. keV              
+/gate/digitizer/Singles/insert                        upholder              
+/gate/digitizer/Singles/upholder/setUphold            138. keV              
+# D E F I N E  T H E  S O U R C E                                           
+#####                                                                       
+/gate/source/addSource Co57                                                 
+/gate/source/Co57/gps/particle gamma                                        
+/gate/source/Co57/gps/ang/type iso                                          
+/gate/source/Co57/gps/energy 122. keV                                       
+/gate/source/Co57/setActivity 2.39 muCi                                      
+#/gate/source/Co57/gps/ang/mintheta 0 deg                                   
+#/gate/source/Co57/gps/ang/maxtheta 15.38 deg                               
+#/gate/source/Co57/gps/ang/minphi 0 deg                                     
+#/gate/source/Co57/gps/ang/maxphi 360 deg                                   
+/gate/source/Co57/gps/pos/centre -0.5 0 -1 cm
+#/gate/source/Co57/visualize 10 yellow 5                                    
+#/gate/source/Co57/vis/enable                                               
+#/gate/stepping/SetMode Tracker                                             
+#/gate/stepping/SetPolicy Option2                                           
+# O U T P U T                                                               
+#####                                                                       
+/gate/output/root/enable                                                    
+/gate/output/root/setFileName ./output/result_data_2_ 
+/gate/output/root/setRootHitFlag 0                                          
+/gate/output/root/setRootSinglesFlag 1                                      
+#/gate/output/root/setRootCoincidencesFlag 0                                
+#/gate/output/root/setRootNtupleFlag 0                                      
+#   R A N D O M                                                             
+# JamesRandom Ranlux64 MersenneTwister                                      
+/gate/random/setEngineName Ranlux64                                         
+#/gate/random/setEngineSeed default                                         
+/gate/random/setEngineSeed auto                                             
+#/gate/random/setEngineSeed 123456789                                       
+#/gate/random/resetEngineFrom fileName                                      
+/gate/random/verbose 1                                                      
+# E X P E R I M E N T                                                       
+#####                                                                       
+/gate/application/setTimeSlice      1  s                                    
+/gate/application/setTimeStart      0.    s                                 
+/gate/application/setTimeStop      300.  s                                  
+# L E T' S   R U N   T H E   S I M U L A T I O N  !                         
+#####                                                                       
+/gate/application/startDAQ                                                 
