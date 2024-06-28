@@ -1,0 +1,13 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = False
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = 0 0 0
+CenterOfRotation = 0 0 0
+AnatomicalOrientation = RPI
+ElementSpacing = 1.5 1.5 1.5
+DimSize = 256 179 300
+ElementType = MET_FLOAT
+ElementDataFile = XCAT_phantom_HU.bin

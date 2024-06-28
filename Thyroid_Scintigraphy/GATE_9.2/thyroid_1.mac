@@ -1,0 +1,222 @@
+#  *********************************************************************           
+#  * DISCLAIMER                                                        *           
+#  *                                                                   *           
+#  * Neither the authors of this software system, nor their employing  *           
+#  * institutes, nor the agencies providing financial support for this *           
+#  * work make any representation or warranty, express or implied,     *           
+#  * regarding this software system or assume any liability for its    *           
+#  * use.                                                              *           
+#  *                                                                   *           
+#  * This code implementation is the intellectual property of the      *           
+#  * OpenGATE collaboration.                                           *           
+#  * By copying, distributing or modifying the Program (or any work    *           
+#  * based on the Program) you indicate your acceptance of this        *           
+#  * statement, and all its terms.                                     *           
+#  ********************************************************************* 
+# M A N D A T O R Y
+/gate/geometry/setMaterialDatabase GateMaterials_XCAT.db                 
+# G E O M E T R Y
+# World
+# Define the world dimensions                                            
+/gate/world/geometry/setXLength 400 cm                                   
+/gate/world/geometry/setYLength 400 cm                                   
+/gate/world/geometry/setZLength 400 cm                                   
+# insert CT
+/gate/HounsfieldMaterialGenerator/SetMaterialTable                  ./data/Schneider2000MaterialsTable.txt
+/gate/HounsfieldMaterialGenerator/SetDensityTable                   ./data/Schneider2000DensitiesTable.txt
+/gate/HounsfieldMaterialGenerator/SetDensityTolerance               0.1 g/cm3
+/gate/HounsfieldMaterialGenerator/SetOutputMaterialDatabaseFilename ./data/HUmaterials.db
+/gate/HounsfieldMaterialGenerator/SetOutputHUMaterialFilename       ./data/HU2mat.txt
+/gate/HounsfieldMaterialGenerator/Generate   
+# CT Scanner
+# Create a new box representing the main head-volume                     
+# SPECThead is the name of the predefined SPECT system                   
+# Create the SPECT system, which will yield an Interfile output of projection data 
+/gate/world/daughters/name CTscanner        
+/gate/world/daughters/insert box            
+/gate/CTscanner/geometry/setXLength 30. cm  
+/gate/CTscanner/geometry/setYLength  5. cm  
+/gate/CTscanner/geometry/setZLength 21. cm  
+/gate/CTscanner/placement/setTranslation  0. -44.925 -5. cm    
+/gate/CTscanner/setMaterial Lead                             
+/gate/CTscanner/vis/forceWireframe                           
+# Module
+# Create the shielding volume                                
+/gate/CTscanner/daughters/name module                        
+/gate/CTscanner/daughters/insert box                         
+/gate/module/geometry/setXLength 29.7 cm                     
+/gate/module/geometry/setYLength  4.7 cm                     
+/gate/module/geometry/setZLength 20.7 cm                     
+/gate/module/placement/setTranslation  0. 0.2 0. cm          
+/gate/module/setMaterial Air                                 
+/gate/module/vis/setColor red                                
+/gate/module/vis/forceWireframe                              
+# Cluster
+# Create the shielding volume                                
+/gate/CTscanner/daughters/name cluster                       
+/gate/CTscanner/daughters/insert box                         
+/gate/cluster/geometry/setXLength 29.7 cm                    
+/gate/cluster/geometry/setYLength  4.7 cm                    
+/gate/cluster/geometry/setZLength 20.7 cm                    
+/gate/cluster/placement/setTranslation  0. 0.2 0. cm 
+/gate/cluster/setMaterial Air 
+/gate/cluster/vis/setColor red 
+/gate/cluster/vis/forceWireframe
+# CollimatorOutter
+# Create a full volume defining the shape of the collimator
+/gate/world/daughters/name CollimatorOutter
+/gate/world/daughters/insert cone
+/gate/CollimatorOutter/geometry/setRmin1 0 mm 
+/gate/CollimatorOutter/geometry/setRmax1 3.45 cm 
+/gate/CollimatorOutter/geometry/setRmin2 0 mm 
+/gate/CollimatorOutter/geometry/setRmax2 20.3 cm 
+/gate/CollimatorOutter/geometry/setHeight 28. cm  
+/gate/CollimatorOutter/placement/setTranslation  0. -28.425 -5. cm
+/gate/CollimatorOutter/setMaterial Lead
+/gate/CollimatorOutter/placement/setRotationAxis 1 0 0 
+/gate/CollimatorOutter/placement/setRotationAngle 90 deg
+/gate/CollimatorOutter/vis/setColor green 
+/gate/CollimatorOutter/vis/forceWireframe
+# Create a full volume defining the shape of the collimator 
+/gate/CollimatorOutter/daughters/name CollimatorInner
+/gate/CollimatorOutter/daughters/insert cone
+/gate/CollimatorInner/geometry/setRmin1 0 mm 
+/gate/CollimatorInner/geometry/setRmax1 3.35 cm
+/gate/CollimatorInner/geometry/setRmin2 0 mm
+/gate/CollimatorInner/geometry/setRmax2 20. cm
+/gate/CollimatorInner/geometry/setHeight 28. cm
+/gate/CollimatorInner/placement/setTranslation  0. 0. 0. cm 
+/gate/CollimatorInner/setMaterial Air
+/gate/CollimatorInner/placement/setRotationAxis 1 0 0
+/gate/CollimatorInner/placement/setRotationAngle 0 deg
+/gate/CollimatorInner/vis/setColor magenta
+/gate/CollimatorInner/vis/forceWireframe
+# Pixel 
+# Create the crystal volume                
+/gate/cluster/daughters/name pixel         
+/gate/cluster/daughters/insert box         
+#/gate/pixel/geometry/setXLength  4.75 mm   
+#/gate/pixel/geometry/setYLength  1. cm     
+#/gate/pixel/geometry/setZLength  4.667 mm  
+/gate/pixel/geometry/setXLength  28. cm
+/gate/pixel/geometry/setYLength  1. cm
+/gate/pixel/geometry/setZLength  19. cm
+/gate/pixel/placement/setTranslation  0. 1.8 0. cm        
+/gate/pixel/setMaterial NaI                               
+/gate/pixel/vis/setColor yellow                           
+# Repeater 
+#/gate/pixel/repeaters/insert cubicArray                   
+#/gate/pixel/cubicArray/setRepeatNumberX 60                
+#/gate/pixel/cubicArray/setRepeatNumberY 1                 
+#/gate/pixel/cubicArray/setRepeatNumberZ  40               
+#/gate/pixel/cubicArray/setRepeatVector 4.667 0.0 4.75 mm  
+#/gate/pixel/cubicArray/autoCenter true                    
+# BACK-COMPARTMENT                                        
+# Create the back-compartment volume                      
+/gate/module/daughters/name compartment                   
+/gate/module/daughters/insert box                         
+/gate/compartment/geometry/setXLength 28. cm              
+/gate/compartment/geometry/setYLength 2.5 cm              
+/gate/compartment/geometry/setZLength 19. cm              
+/gate/compartment/placement/setTranslation 0. 0.05 0. cm 
+/gate/compartment/setMaterial Glass                       
+/gate/compartment/vis/setColor grey                       
+# V O X E L I Z E D  M A T R I X   H O F F M A N   B R A I N   P H A N T O M 
+/gate/world/daughters/name xcat_phantom                                      
+/gate/world/daughters/insert ImageNestedParametrisedVolume                   
+/gate/xcat_phantom/geometry/SetImage whole_body_phantom_XCAT.h33             
+/gate/geometry/setMaterialDatabase                      ./data/HUmaterials.db  
+/gate/xcat_phantom/geometry/setHUToMaterialFile              ./data/HU2mat.txt
+/gate/xcat_phantom/placement/setTranslation  0. 0. 0. mm                     
+/gate/xcat_phantom/placement/setRotationAxis 0 0 1                           
+/gate/xcat_phantom/placement/setRotationAngle 0 deg                          
+/gate/systems/CTscanner/module/attach module     
+/gate/systems/CTscanner/cluster_0/attach cluster 
+/gate/systems/CTscanner/pixel_0/attach pixel     
+/gate/pixel/attachCrystalSD
+#  P H Y S I C S 
+#/gate/physics/addProcess PhotoElectric                              
+#/gate/physics/processes/PhotoElectric/setModel StandardModel        
+#/gate/physics/addProcess Compton                                    
+#/gate/physics/processes/Compton/setModel PenelopeModel              
+#/gate/physics/addProcess RayleighScattering                         
+#/gate/physics/processes/RayleighScattering/setModel PenelopeModel   
+#/gate/physics/addProcess ElectronIonisation                         
+#/gate/physics/processes/ElectronIonisation/setModel StandardModel e-
+#/gate/physics/addProcess Bremsstrahlung                             
+#/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-    
+#/gate/physics/addProcess MultipleScattering e-                      
+#/gate/physics/processList Enabled                                   
+#/gate/physics/processList Initialized                               
+/gate/physics/addPhysicsList emstandard_opt4
+/gate/physics/Gamma/SetCutInRegion world 0.1 mm
+/gate/physics/Electron/SetCutInRegion world 100 mm
+/gate/physics/Gamma/SetCutInRegion xcat_phantom 0.1 mm
+/gate/physics/Electron/SetCutInRegion xcat_phantom 100 mm
+#  C U T S 
+# Cuts for particle in WORLD                                        
+/gate/physics/Gamma/SetCutInRegion      CTscanner 0.1 cm            
+/gate/physics/Electron/SetCutInRegion   CTscanner 10.0 cm            
+# D I G I T I Z E R 
+/gate/digitizer/Singles/insert                        adder         
+/gate/digitizer/Singles/insert                        readout       
+/gate/digitizer/Singles/readout/setDepth              3             
+/gate/digitizer/Singles/insert                        blurring      
+/gate/digitizer/Singles/blurring/setResolution        0.1           
+/gate/digitizer/Singles/blurring/setEnergyOfReference 140. keV      
+/gate/digitizer/Singles/insert spblurring
+/gate/digitizer/Singles/spblurring/setSpresolution 2.0 mm
+/gate/digitizer/Singles/insert                        thresholder   
+/gate/digitizer/Singles/thresholder/setThreshold      120. keV      
+/gate/digitizer/Singles/insert                        upholder      
+/gate/digitizer/Singles/upholder/setUphold            160. keV      
+# I N I T I A L I Z A T I O N
+/gate/run/initialize                                              
+# V I S U A L I S A T I O N 
+#####                                                             
+/vis/disable                                                     
+#/control/execute vis.mac                                          
+# O U T P U T 
+/gate/output/root/enable                                          
+/gate/output/root/setFileName             ./output/result_data_1_ 
+/gate/output/root/setRootHitFlag          0                       
+/gate/output/root/setRootSinglesFlag      1                       
+#   R A N D O M 
+# JamesRandom Ranlux64 MersenneTwister    
+#/gate/random/setEngineName Ranlux64 
+#/gate/random/setEngineSeed default       
+/gate/random/setEngineSeed auto
+#/gate/random/setEngineSeed 123456789     
+#/gate/random/resetEngineFrom fileName    
+/gate/random/verbose 1   
+# V O X E L   S O U R C E   B A S E D  O N   T H E   H O F F M A N   B R A I N   P H A N T O M 
+/gate/source/addSource xcat_source voxel                     
+/gate/source/xcat_source/reader/insert image                 
+/gate/source/xcat_source/imageReader/translator/insert range 
+/gate/source/xcat_source/imageReader/rangeTranslator/readTable activity_range_thyroid.dat
+/gate/source/xcat_source/imageReader/rangeTranslator/describe 1 
+/gate/source/xcat_source/imageReader/readFile whole_body_phantom_XCAT_activity_1.h33
+/gate/source/xcat_source/setPosition  -192. -134.25 -225. mm 
+#/gate/source/xcat_source/setType backtoback        
+/gate/source/xcat_source/gps/particle gamma         
+#/gate/source/xcat_source/setForcedUnstableFlag true
+/gate/source/xcat_source/setForcedHalfLife 6. h     
+/gate/source/xcat_source/gps/energytype Mono        
+/gate/source/xcat_source/gps/monoenergy 0.140 MeV   
+#/gate/source/xcat_source/gps/confine NULL          
+/gate/source/xcat_source/gps/angtype iso            
+/gate/source/xcat_source/gps/mintheta 0. deg
+/gate/source/xcat_source/gps/maxtheta 30. deg
+/gate/source/xcat_source/gps/minphi 0. deg
+/gate/source/xcat_source/gps/maxphi 360. deg
+/gate/source/xcat_source/gps/ang/rot1 0 0 1
+/gate/source/xcat_source/gps/ang/rot2 1 0 0
+/gate/source/xcat_source/dump 1                     
+/gate/source/list                                   
+# E X P E R I M E N T
+#/gate/application/setTimeSlice      1.   s         
+/gate/application/setTimeStart      0.   s          
+/gate/application/setTimeStop       2.   s        
+# L E T' S   R U N   T H E   S I M U L A T I O N  ! 
+/gate/application/startDAQ                          
+exit
